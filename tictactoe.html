@@ -1,0 +1,145 @@
+<div id="cont">
+<center>
+<h1>TicTacToe</h1>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" onClick="turnChange()" style="border:1px solid black">
+	<rect onClick="select(0)" id="0" x="0" y="0" width="200" height="200" style="fill:blue;stroke:black;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+	<rect onClick="select(1)" id="1" x="200" y="0" width="200" height="200" style="fill:blue;stroke:black;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+	<rect onClick="select(2)" id="2" x="400" y="0" width="200" height="200" style="fill:blue;stroke:black;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+	
+	<rect onClick="select(3)" id="3" x="0" y="200" width="200" height="200" style="fill:blue;stroke:black;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+	<rect onClick="select(4)" id="4" x="200" y="200" width="200" height="200" style="fill:blue;stroke:black;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+	<rect onClick="select(5)" id="5" x="400" y="200" width="200" height="200" style="fill:blue;stroke:black;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+	
+	<rect onClick="select(6)" id="6" x="0" y="400" width="200" height="200" style="fill:blue;stroke:black;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+	<rect onClick="select(7)" id="7" x="200" y="400" width="200" height="200" style="fill:blue;stroke:black;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+	<rect onClick="select(8)" id="8" x="400" y="400" width="200" height="200" style="fill:blue;stroke:black;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+		
+</svg>
+<p id= "win"></p>
+<button onClick="restart()">restart</button>
+</center>
+</div>
+<script>
+
+var turn = "x";
+var blocked = 0;
+
+var usedFields = {
+0: 0,
+1: 1,
+2: 2,
+
+3: 3,
+4: 4,
+5: 5,
+
+6: 6,
+7: 7,
+8: 8
+}
+
+var cordsObj = {
+0: [0,0],
+1: [200,0],
+2: [400,0],
+
+3: [0,200],
+4: [200,200],
+5: [400,200],
+
+6: [0,400],
+7: [200,400],
+8: [400,400],
+} 
+function getCords(square){
+
+return cordsObj[square]
+}
+function turnChange(){
+	if (turn == "x"){
+		turn = "o"
+	}else{
+		turn = "x"
+	}
+}
+
+function select(square){
+	if (usedFields[square] != "x" && usedFields[square] != "o"){
+		usedFields[square] = turn;
+	}else{
+		return;
+	}
+
+	cords = getCords(square)	
+	if(blocked == 0){
+		if (turn == "x"){
+			drawCross(cords)
+			checkWin()
+		}else{
+			drawCircle(cords)
+			checkWin()
+		}	
+	}
+	
+}
+function checkWin(){
+	//horizontal
+	if(usedFields[0] == usedFields[1] && usedFields[1] == usedFields[2]){win()}
+	if(usedFields[3] == usedFields[4] && usedFields[4] == usedFields[5]){win()}
+	if(usedFields[6] == usedFields[7] && usedFields[7] == usedFields[8]){win()}
+	//vertikal
+	if(usedFields[0] == usedFields[3] && usedFields[3] == usedFields[6]){win()}
+	if(usedFields[1] == usedFields[4] && usedFields[4] == usedFields[7]){win()}
+	if(usedFields[2] == usedFields[5] && usedFields[5] == usedFields[8]){win()}
+	//Diagonal 
+	if(usedFields[0] == usedFields[4] && usedFields[4] == usedFields[8]){win()}
+	if(usedFields[2] == usedFields[4] && usedFields[4] == usedFields[6]){win()}
+	
+}
+function win(){
+blocked = 1;
+	if(turn == "o"){
+	document.getElementById("win").innerHTML = "Kreis gewinnt!";
+	}else{
+	document.getElementById("win").innerHTML = "Kreuz gewinnt!";
+	}
+}
+function restart(){
+location.reload()
+}
+
+function drawCircle(cords){
+	const svg = document.querySelector("svg");
+	const svgns = "http://www.w3.org/2000/svg";
+	let newCircle = document.createElementNS(svgns, "circle");
+	
+	newCircle.setAttribute("cx", cords[0]+100);
+	newCircle.setAttribute("cy", cords[1]+100);
+	newCircle.setAttribute("r", "90");
+	newCircle.setAttribute("fill", "#5cceee");
+
+	svg.appendChild(newCircle);
+}
+function drawCross(cords){
+	const svg = document.querySelector("svg");
+	const svgns = "http://www.w3.org/2000/svg";
+	let newLine1 = document.createElementNS(svgns, "line");
+	newLine1.setAttribute("x1", cords[0]);
+	newLine1.setAttribute("y1", cords[1]);
+	newLine1.setAttribute("x2", cords[0]+200);
+	newLine1.setAttribute("y2", cords[1]+200);
+	newLine1.setAttribute("stroke", "red");
+	newLine1.setAttribute("stroke-width", "10")
+	svg.appendChild(newLine1);
+	
+	let newLine2 = document.createElementNS(svgns, "line");
+	newLine2.setAttribute("x1", cords[0]+200);
+	newLine2.setAttribute("y1", cords[1]);
+	newLine2.setAttribute("x2", cords[0]);
+	newLine2.setAttribute("y2", cords[1]+200);
+	newLine2.setAttribute("stroke", "red");
+	newLine2.setAttribute("stroke-width", "10")
+	svg.appendChild(newLine2);
+}
+</script>
+  
